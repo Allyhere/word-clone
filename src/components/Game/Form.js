@@ -1,5 +1,4 @@
 import { NUM_OF_CHARACTERS_ALLOWED } from "../../constants";
-import { GAME_STATES } from "../../game-helpers";
 
 const Form = ({ setGuess, tries, setTries, setError: setGameAlert }) => {
   const handleSubmit = (event) => {
@@ -9,7 +8,17 @@ const Form = ({ setGuess, tries, setTries, setError: setGameAlert }) => {
       const isLetterLimit =
         formField.value.split("").length !== NUM_OF_CHARACTERS_ALLOWED;
       if (isLetterLimit) {
-        setGameAlert({ ...GAME_STATES.isLetterLimit });
+        setGameAlert({
+          state: "sad",
+          message: (
+            <>
+              Sorry,{" "}
+              <strong>
+                your guess must have {NUM_OF_CHARACTERS_ALLOWED} words!
+              </strong>
+            </>
+          ),
+        });
         return prev;
       }
 
@@ -23,7 +32,13 @@ const Form = ({ setGuess, tries, setTries, setError: setGameAlert }) => {
   return (
     <form className="guess-input-wrapper" onSubmit={handleSubmit}>
       <label htmlFor="guess-input">Enter guess:</label>
-      <input id="guess-input" type="text" />
+      <input
+        id="guess-input"
+        type="text"
+        maxLength={5}
+        minLength={5}
+        disabled={tries > 5}
+      />
     </form>
   );
 };

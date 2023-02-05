@@ -2,7 +2,6 @@ import React, { memo, useCallback, useState } from "react";
 
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
-import { GAME_STATES } from "../../game-helpers";
 import { Guess as NewGuess } from "./Guess";
 import { GameState as NewGameState } from "./GameState";
 import { Form } from "./Form";
@@ -19,21 +18,36 @@ function Game() {
   const [gameAlert, setGameAlert] = useState(null);
 
   const gameReset = () => {
-      setGuess(initialState);
-      setTries(0);
+    setGuess(initialState);
+    setTries(0);
   };
 
   const isWordCorrect = guess[tries - 1] === answer;
   const isTriesLimit = tries > 5;
 
   if (isWordCorrect) {
-    setGameAlert({ ...GAME_STATES.isGameWon });
+    setGameAlert({
+      state: "happy",
+      message: (
+        <>
+          <strong>Congratulations!</strong> Got it in
+          <strong>{tries} guesses</strong>.
+        </>
+      ),
+    });
     gameReset();
     return;
   }
 
   if (isTriesLimit) {
-    setGameAlert({ ...GAME_STATES.isTriesLimit });
+    setGameAlert({
+      state: "sad",
+      message: (
+        <>
+          Sorry, the correct answer is <strong>{answer}</strong>.
+        </>
+      ),
+    });
     gameReset();
     return;
   }
