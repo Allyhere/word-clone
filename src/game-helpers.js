@@ -1,25 +1,30 @@
-export function checkGuess(guess, answer) {
-  if (!guess) {
-    return null;
+import { NUM_OF_CHARACTERS_ALLOWED } from "./constants";
+
+export const checkGuess = (guess, guessIndex, answer) => {
+  const hasWord = [...answer].includes(guess);
+  const isInSameIndex = guessIndex == [...answer].indexOf(guess);
+  const isMisplaced = hasWord && !isInSameIndex && "misplaced";
+  const isIncorrect = !isInSameIndex && !hasWord && "incorrect";
+  const isCorrect = hasWord && isInSameIndex && "correct";
+  return isIncorrect || isMisplaced || isCorrect;
+};
+
+export const GAME_STATES = {
+  isLetterLimit: {
+    state: "sad",
+    message: (
+      <>
+        Sorry,{" "}
+        <strong>your guess must have {NUM_OF_CHARACTERS_ALLOWED} words!</strong>
+      </>
+    ),
+  },
+  isTriesLimit: {
+    state: "sad",
+    message: <strong>Sorry, you are out of tries :/</strong>,
+  },
+  isGameWon: {
+    state: "happy",
+    message: <strong>YAY, you won the game!! </strong>,
   }
-
-  const guessChars = guess.toUpperCase().split('');
-  const answerChars = answer.split('');
-
-  return guessChars.map((guessChar, index) => {
-    const answerChar = answerChars[index];
-
-    let status;
-    if (guessChar === answerChar) {
-      status = 'correct';
-    } else if (answerChars.includes(guessChar)) {
-      status = 'misplaced';
-    } else {
-      status = 'incorrect';
-    }
-    return {
-      letter: guessChar,
-      status,
-    };
-  });
-}
+};

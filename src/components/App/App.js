@@ -3,13 +3,13 @@ import Header from '../Header';
 
 function App() {
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <Header />
 
       <div className="game-wrapper">
         <Game />
       </div>
-    </div>
+    </main>
   );
 }
 
