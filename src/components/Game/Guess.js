@@ -1,19 +1,15 @@
-import { checkGuess } from "../../game-helpers";
+import { NUM_OF_CHARACTERS_ALLOWED } from "../../constants";
 
-const Guess = ({ difficultyIndex, answer, word = "" }) => {
-  const cellCounter =
-    word.split("").length > 0
-      ? word.split("")
-      : new Array(difficultyIndex).fill("");
-
+const Guess = ({ word }) => {
+  const cellCounter = word || new Array(NUM_OF_CHARACTERS_ALLOWED).fill('')
   return (
     <p className="guess">
-      {cellCounter.map((content, index) => (
+      {cellCounter.map((letter, index) => (
         <span
           key={index}
-          className={`cell ${content && checkGuess(content, index, answer)}`}
+          className={`cell ${letter?.state}`}
         >
-          {content}
+          {letter?.letter}
         </span>
       ))}
     </p>

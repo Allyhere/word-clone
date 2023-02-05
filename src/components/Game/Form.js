@@ -1,6 +1,13 @@
 import { NUM_OF_CHARACTERS_ALLOWED } from "../../constants";
+import { checkGuess } from "../../game-helpers";
 
-const Form = ({ setGuess, tries, setTries, setError: setGameAlert }) => {
+const Form = ({
+  setGuess,
+  tries,
+  setTries,
+  answer,
+  setError: setGameAlert,
+}) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formField = event.target.elements[0];
@@ -23,7 +30,10 @@ const Form = ({ setGuess, tries, setTries, setError: setGameAlert }) => {
       }
 
       const prevCopy = [...prev];
-      prevCopy.splice(tries, 1, formField.value.toUpperCase());
+      const parsedValue = [...formField.value.toUpperCase()].map(
+        (guess, index) => checkGuess(guess, index, answer)
+      );
+      prevCopy.splice(tries, 1, parsedValue);
       setTries((prev) => prev + 1);
       formField.value = "";
       return prevCopy;

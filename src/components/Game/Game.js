@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useState } from "react";
 
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
@@ -56,18 +56,12 @@ function Game() {
     <div className="game-wrapper">
       <div className="guess-results">
         {guess.map((word, index) => {
-          return (
-            <Guess
-              key={index}
-              difficultyIndex={NUM_OF_GUESSES_ALLOWED - 1}
-              answer={answer}
-              word={word}
-            />
-          );
+          return <Guess word={word} key={index} />;
         })}
       </div>
       <Form
         tries={tries}
+        answer={answer}
         setError={setGameAlert}
         setGuess={setGuess}
         setTries={setTries}

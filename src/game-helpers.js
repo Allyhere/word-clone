@@ -4,5 +4,8 @@ export const checkGuess = (guess, guessIndex, answer) => {
   const isMisplaced = hasWord && !isInSameIndex && "misplaced";
   const isIncorrect = !isInSameIndex && !hasWord && "incorrect";
   const isCorrect = hasWord && isInSameIndex && "correct";
-  return isIncorrect || isMisplaced || isCorrect;
+  return {
+    letter: guess,
+    state: isIncorrect || isMisplaced || isCorrect,
+  };
 };
