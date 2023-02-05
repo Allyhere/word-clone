@@ -1,14 +1,17 @@
 import React, { memo, useState } from "react";
 
 import { sample } from "../../utils";
-import { WORDS } from "../../data";
-import { Guess as NewGuess } from "./Guess";
-import { GameState as NewGameState } from "./GameState";
-import { Form } from "./Form";
+import { checkGuess } from "../../game-helpers";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
+import { WORDS } from "../../data";
+import { Guess as MemoizedGuess } from "../Guess/Guess";
+import { GameState as MemoizedGameState } from "../GameState/GameState";
+import { Form as MemoizedForm } from "../Form/Form";
 
-const Guess = memo(NewGuess);
-const GameState = memo(NewGameState);
+const Guess = memo(MemoizedGuess);
+const GameState = memo(MemoizedGameState);
+const Form = memo(MemoizedForm);
+
 const answer = sample(WORDS);
 const initialState = Array(NUM_OF_GUESSES_ALLOWED).fill("");
 
@@ -20,6 +23,18 @@ function Game() {
   const gameReset = () => {
     setGuess(initialState);
     setTries(0);
+  };
+
+  const handleSubmitGuess = (tentativeGuess) => {
+    setGuess((prev) => {
+      const prevCopy = [...prev];
+      const parsedValue = [...tentativeGuess].map((guess, index) =>
+        checkGuess(guess, index, answer)
+      );
+      prevCopy.splice(tries, 1, parsedValue);
+      setTries((prev) => prev + 1);
+      return prevCopy;
+    });
   };
 
   const isWordCorrect = guess[tries - 1] === answer;
@@ -60,11 +75,9 @@ function Game() {
         })}
       </div>
       <Form
-        tries={tries}
-        answer={answer}
         setError={setGameAlert}
-        setGuess={setGuess}
-        setTries={setTries}
+        tries={tries}
+        handleSubmitGuess={handleSubmitGuess}
       />
       {gameAlert && (
         <GameState gameAlert={gameAlert} setGameAlert={setGameAlert} />
@@ -73,4 +86,4 @@ function Game() {
   );
 }
 
-export default Game;
+export { Game };
